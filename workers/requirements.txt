@@ -1,0 +1,11 @@
+# Driver moderno da Oracle
+oracledb==2.1.2
+
+# Framework de automação web e manipulação de DOM
+playwright==1.42.0
+
+# Gestão segura de variáveis de ambiente locais
+python-dotenv==1.0.1
+
+# Manipulação de dados e planilhas
+pandas==2.2.1

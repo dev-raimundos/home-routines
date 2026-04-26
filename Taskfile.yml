@@ -1,0 +1,36 @@
+version: '3'
+
+tasks:
+  setup:
+    desc: "Prepara as pastas, permissões e o banco do Airflow (Rodar apenas na 1ª vez)"
+    cmds:
+    - mkdir -p airflow/dags airflow/logs scripts/common scripts/rpa_web
+    - sudo chown -R 50000:$(id -g) airflow/ scripts/
+    - sudo chmod -R 775 airflow/ scripts/
+    - docker compose up -d postgres-airflow
+    - echo "Aguardando o Postgres aceitar conexões..."
+    - sleep 5
+    - docker compose run --rm airflow-webserver airflow db migrate
+    - >
+      docker compose run --rm airflow-webserver airflow users create  --username admin  --firstname Admin  --lastname Local  --role Admin  --email admin@local.test  --password admin
+
+  build-worker:
+    desc: "Constrói a imagem rpa-worker com Python, Playwright e Oracle"
+    cmds:
+    - docker build -t rpa-worker:latest ./workers
+
+  up:
+    desc: "Sobe a infraestrutura completa do Airflow"
+    cmds:
+    - docker compose up -d
+
+  down:
+    desc: "Derruba os serviços"
+    cmds:
+    - docker compose down
+
+  nuke:
+    desc: "Destrói volumes e limpa logs (Cuidado!)"
+    cmds:
+    - docker compose down -v
+    - sudo rm -rf airflow/logs/*

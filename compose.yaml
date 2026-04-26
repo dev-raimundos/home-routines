@@ -1,0 +1,56 @@
+services:
+  postgres-airflow:
+    image: postgres:16-alpine
+    container_name: airflow-db
+    environment:
+      - POSTGRES_USER=${AIRFLOW_DB_USER}
+      - POSTGRES_PASSWORD=${AIRFLOW_DB_PASS}
+      - POSTGRES_DB=airflow
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - airflow_db_data:/var/lib/postgresql/data
+    networks:
+      - automation-net
+
+  airflow-webserver:
+    image: apache/airflow:2.9.0-python3.11
+    container_name: airflow-webserver
+    depends_on:
+      - postgres-airflow
+    environment:
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${AIRFLOW_DB_USER}:${AIRFLOW_DB_PASS}@postgres-airflow/airflow
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./scripts:/opt/airflow/scripts
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - automation-net
+    command: webserver
+
+  airflow-scheduler:
+    image: apache/airflow:2.9.0-python3.11
+    container_name: airflow-scheduler
+    depends_on:
+      - postgres-airflow
+    environment:
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${AIRFLOW_DB_USER}:${AIRFLOW_DB_PASS}@postgres-airflow/airflow
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./scripts:/opt/airflow/scripts
+    networks:
+      - automation-net
+    command: scheduler
+
+networks:
+  automation-net:
+    driver: bridge
+
+volumes:
+  airflow_db_data:
