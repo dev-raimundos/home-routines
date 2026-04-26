@@ -1,31 +1,9 @@
-ORION =
+ORACLE =
   (DESCRIPTION =
     (ADDRESS_LIST =
-      (ADDRESS = (PROTOCOL = TCP)(HOST = 10.3.101.150)(PORT = 1521))
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 200.100.5.1)(PORT = 1521))
     )
     (CONNECT_DATA =
-      (SERVICE_NAME = orion.grupomonaco.local)
-    )
-  )
-
-
-ORION_TESTE =
-  (DESCRIPTION =
-    (ADDRESS_LIST =
-      (ADDRESS = (PROTOCOL = TCP)(HOST = 10.3.101.151)(PORT = 1521))
-    )
-    (CONNECT_DATA =
-      (SERVICE_NAME = orion_teste.grupomonaco.local)
-    )
-  )
-
-
-MONACO_DEV =
-  (DESCRIPTION =
-    (ADDRESS_LIST =
-      (ADDRESS = (PROTOCOL = TCP)(HOST = 10.3.101.151)(PORT = 1521))
-    )
-    (CONNECT_DATA =
-      (SERVICE_NAME = monaco_dev.grupomonaco.local)
+      (SERVICE_NAME = freepdb.vertex.local)
     )
   )
