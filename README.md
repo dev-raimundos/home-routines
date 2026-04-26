@@ -102,6 +102,3 @@ Raimundos Marques da Silva Neto
   * Logging integrado com Airflow
 
 ---
-
-Se quiser, posso já transformar isso num README ainda mais avançado (com badges, diagramas de arquitetura e fluxo dos RPAs) ou partir direto pra **BaseAutomation em Python** — que é onde teu projeto realmente ganha escala.
-# home-routines
